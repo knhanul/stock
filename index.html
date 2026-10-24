@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 분석 대시보드</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background: #0f1117; color: #e8eaed; font-family: system-ui, sans-serif; }
+    .card { background: #1a1d27; border: 1px solid #2a2e3a; border-radius: 12px; }
+    .positive { color: #22c55e; }
+    .negative { color: #ef4444; }
+    .neutral { color: #94a3b8; }
+    .signal-buy { background: #166534; color: #bbf7d0; }
+    .signal-sell { background: #7f1d1d; color: #fecaca; }
+    .signal-hold { background: #374151; color: #d1d5db; }
+  </style>
+</head>
+<body class="p-4 md:p-6">
+  <div class="max-w-7xl mx-auto">
+    <header class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-bold">반도체 분석 대시보드</h1>
+        <p class="text-sm text-gray-400">삼성전자 · 삼성전기 · SK하이닉스 | 동일 업종 상대강도 + 시장 국면</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="regimeBadge" class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-900 text-yellow-200">국면 확인 중</span>
+        <span class="text-xs text-gray-500" id="lastUpdate">—</span>
+      </div>
+    </header>
+
+    <!-- Market Regime -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div class="card p-4">
+        <div class="text-xs text-gray-400">코스피</div>
+        <div class="text-xl font-semibold" id="kospi">—</div>
+        <div class="text-sm" id="kospiChg">—</div>
+      </div>
+      <div class="card p-4">
+        <div class="text-xs text-gray-400">나스닥</div>
+        <div class="text-xl font-semibold" id="nasdaq">—</div>
+        <div class="text-sm" id="nasdaqChg">—</div>
+      </div>
+      <div class="card p-4">
+        <div class="text-xs text-gray-400">SOX</div>
+        <div class="text-xl font-semibold" id="sox">—</div>
+        <div class="text-sm" id="soxChg">—</div>
+      </div>
+      <div class="card p-4">
+        <div class="text-xs text-gray-400">VIX</div>
+        <div class="text-xl font-semibold" id="vix">—</div>
+        <div class="text-sm text-gray-400">변동성</div>
+      </div>
+    </section>
+
+    <!-- Stocks -->
+    <section class="grid md:grid-cols-3 gap-4 mb-6" id="stocksGrid"></section>
+
+    <!-- Relative Strength + Timeframes -->
+    <section class="grid md:grid-cols-2 gap-4 mb-6">
+      <div class="card p-4">
+        <h2 class="font-semibold mb-3">상대 강도 (국내 vs 미국)</h2>
+        <canvas id="relativeChart" height="180"></canvas>
+      </div>
+      <div class="card p-4">
+        <h2 class="font-semibold mb-3">타임프레임 정렬</h2>
+        <div id="timeframeTable" class="text-sm"></div>
+      </div>
+    </section>
+
+    <!-- Signal Output -->
+    <section class="card p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-semibold">매매 신호 (트레이딩 시스템 연동용)</h2>
+        <button onclick="copySignals()" class="text-xs px-3 py-1 bg-gray-700 rounded hover:bg-gray-600">복사</button>
+      </div>
+      <pre id="signalOutput" class="bg-black/40 p-3 rounded text-xs overflow-x-auto text-green-300"></pre>
+    </section>
+
+    <footer class="mt-6 text-xs text-gray-500 text-center">
+      샘플 데이터 기반. 실제 시세 API 연동 후 사용. 기존 트레이딩 시스템에 신호를 전달하도록 설계됨.
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
